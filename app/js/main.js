@@ -17,4 +17,62 @@ $(function () {
     }
     $(window).resize(positionFooter);
 
+
+    var initBlock={
+        init:function () {
+            initBlock.initBlockPos();
+            initBlock.bindMouseEnter();
+            initBlock.bindMouseLeave();
+            // initBlock.bindLeave();
+        },
+        initBlockPos: function () {
+            // 初始化滑块位置
+            $('.Jblock').stop().animate({
+                left: ($('.currentLi').index()-1)*140
+            },300)
+        },
+        bindMouseEnter:function () {
+            $('.navUl .nav-li').on('mouseenter',function () {
+
+                $(this).find('.child-ul').stop().slideDown(300)
+
+                // var _index = $(this).index();
+                //
+                // $('.Jblock').stop().animate({
+                //     left: (_index-1)*140
+                // },300)
+            });
+        },
+        bindMouseLeave:function () {
+            $('.navUl .nav-li').on('mouseleave',function () {
+
+                $(this).find('.child-ul').stop().slideUp(300)
+
+            });
+        },
+        // 连续点击偶尔会触发这个方法
+        // bindLeave:function () {
+        //     $('.navUl').on('mouseleave',function () {
+        //         $('.Jblock').stop().animate({
+        //             left: ($('.currentLi').index()-1)*140
+        //         },300)
+        //     })
+        // }
+    }
+
+    initBlock.init();
+
+
+
+    !function  () {
+        $(document).on('click','[data-type]',function () {
+            if($(this).is('.active')) return;
+
+            var type = $(this).data('type');
+            $(this).addClass('active').siblings().removeClass('active');
+            $('[data-node='+type+']').show().siblings().hide();
+        })
+    }();
+
+
 })

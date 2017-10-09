@@ -4,25 +4,210 @@
 var gulp = require('gulp');
 // 这里要用gulp-sass不能用gulp-ruby-sass
 var sass = require('gulp-sass');
+// 引入compass
+var compass = require('gulp-compass');
+// 热加载
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+// tpl
+var fileinclude  = require('gulp-file-include');
+// 重命名
+var rename = require("gulp-rename");
+// 压缩css
+var minifyCSS = require('gulp-minify-css');
+
+// 文件拼合
+var concat = require('gulp-concat');
+
+// 读写文件 node 内置模块
+var fs = require('fs');
+// 文件内的附加内容
+var wrapper = require('gulp-wrapper');
+// gulp任务按顺序执行
+var gulpSequence = require('gulp-sequence');
+// 正则替换
+var replace = require('gulp-replace');
+// html内容替换
+var htmlreplace = require('gulp-html-replace');
+
+/**
+ * [projectConfig 项目设置]
+ */
+var projectConfig = {
+    // 项目名称
+    name: 'gulp pro',
+    // 项目开发者
+    author: 'zhangwei36@staff.sina.com.cn',
+    // 是否自动发布
+    isAutoRelease: true,
+    // 发布路径
+    releasePath: 'finance/crowdfunding/index/3.0.0',
+    // 是否自动补全 CDN路径
+    isAutoPrefixCDN: true,
+    // CDN路径
+    cdnPath: '//static.360buyimg.com/'
+};
 
 
-gulp.task('sass', function() {
+/**
+ * [projectUtil 工具类]
+ */
+var projectUtil = {
+    // 格式化路径
+    fomartPath: function(pathStr) {
+        return pathStr.replace(/\\/g, '\/');
+    },
+    // 获取当前目录
+    getCurrentDir: function() {
+        return fs.realpathSync('./');
+    },
+    // 获取svn根目录
+    getSvnRoot: function() {
+        var currentDir = this.getCurrentDir();
+        var svnRoot = currentDir.replace(/static\S*/g, '');
+        svnRoot = this.fomartPath(svnRoot);
+        return svnRoot;
+    },
+    // 获取发布目录
+    getReleasePath: function() {
+        var svnRoot = this.getSvnRoot();
+        var releasePath = projectConfig.releasePath;
+        var targetPath = path.join(svnRoot, 'release', releasePath);
+        return targetPath;
+    },
+    // 获取CDN全部路径
+    getCDNpath: function() {
+        var cdnPath = projectConfig.cdnPath + projectConfig.releasePath;
+        return cdnPath;
+    },
+    // 获取当前时间
+    getNowDate: function() {
+        var nowDate = new Date();
+        now = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate() + ' ' + nowDate.getHours() + ':' + nowDate.getMinutes() + ':' + nowDate.getMinutes();
+        return now;
+    },
+    // 删除文件夹
+    deleteDir: function(path) {
+        var _this = this;
+        var files = [];
+        if (fs.existsSync(path)) {
+            files = fs.readdirSync(path);
+            files.forEach(function(file, index) {
+                var curPath = path + "/" + file;
+                if (fs.statSync(curPath).isDirectory()) { // recurse
+                    _this.deleteDir(curPath);
+                } else { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            fs.rmdirSync(path);
+        }
+    }
+};
+
+
+//compass
+gulp.task('compass',function(){
     return gulp.src('app/scss/*.scss')
-        .pipe(sass())
-        .pipe(gulp.dest('app/css'))
+        .pipe(compass({
+            // config_file: './style/scss/config.rb',
+            // 是否生成map文件
+            sourcemap: false,
+            time: true,
+            css: 'app/css/',
+            sass: 'app/scss/',
+            style: 'compact' //nested, expanded, compact, compressed
+        }))
+        .pipe(gulp.dest('app/css/'));
 });
 
+// html打包到build目录时候对css和js的引用路径进行替换
+gulp.task('html',function() {
+    // var opts = {comments:false,spare:false,quotes:true};
+    return gulp.src('app/html/**/*.html')
+        .pipe(htmlreplace({
+            'css': projectUtil.getCDNpath()+'/css/index.min.css',
+            'js': projectUtil.getCDNpath()+'/js/main.min.js'
+        }))
+        .pipe(gulp.dest('app/build/html'));
+});
+
+// task build 打包流程
+gulp.task('build', function() {
+    gulp.run(['minifyCss', 'html']);
+});
+// html
+// gulp.task('html', function() {
+//     gulp.src('app/html/**/*.html')
+//     // 正则匹配路径，注意..\/
+//         .pipe(replace(/href="..\/..\/css/g, 'href="' + projectUtil.getCDNpath() + '/css/index.min.css'))
+//         // .pipe(replace(/src="..\/js/g, 'src="' + projectUtil.getCDNpath() + '/js'))
+//         // .pipe(replace(/src="..\/images/g, 'src="' + projectUtil.getCDNpath() + '/images'))
+//         // .pipe(replace(/src="..\/css/g, 'src="' + projectUtil.getCDNpath() + '/css'))
+//         // .pipe(replace(/url\(..\/images/g, 'url(' + projectUtil.getCDNpath() + '/images'))
+//         // .pipe(replace(/lazyload="..\/images/g, 'lazyload="' + projectUtil.getCDNpath() + '/images'))
+//         .pipe(gulp.dest('app/build/html'))
+// });
+
+// css拼合
+gulp.task('contactCss', function() {
+    return gulp.src('app/css/*.css')
+        .pipe(concat('index.css'))
+        .pipe(gulp.dest('app/build/css'))
+});
+
+// css压缩,先拼合再压缩
+gulp.task('minifyCss',['contactCss'],function() {
+    return gulp.src([
+        'app/build/css/*.css'
+    ])
+        .pipe(minifyCSS({
+            compatibility: 'ie7'
+        }))
+        .pipe(wrapper({
+            header: '/* @update: ' + projectUtil.getNowDate() + ' */ \n'
+        }))
+            // 将css文件的名字改成min.css的
+        .pipe(rename(function(path) {
+            path.basename += ".min";
+            path.extname = ".css";
+        }))
+        .pipe(gulp.dest('app/build/css'))
+});
+
+// tpl模板任务
+gulp.task('fileinclude', function() {
+    // 路径为页面级的tpl路径
+    gulp.src(['app/html/template/*.tpl'])
+        .pipe(fileinclude({
+            prefix: '@@',
+            basepath: '@file'
+        }))
+    // 页面级tpl改为html后缀输出
+        .pipe(rename({
+            extname: ".html"
+        }))
+        .pipe(gulp.dest('app/html'));
+});
+
+
 // 监视文件改动并重新载入
-gulp.task('server',['sass'], function() {
+gulp.task('server', function() {
+    // 先拼合一下模板
+    gulp.run(['fileinclude']);
+    // 模板发生修改的时候再重新拼合模板并更新html,watch的时候一定要指定cwd的目录
+    // **/*能匹配到目录下的所有文件
+    gulp.watch('html/template/**/*.tpl', {cwd: 'app'}, ['fileinclude']);
+
     browserSync({
         server: {
-            baseDir: 'app'
+            baseDir: 'app',
+            // 是否开启目录访问
+            directory: true
         }
     });
     // gulp监控到scss文件改变就执行sass任务
-    gulp.watch('app/scss/*.scss', ['sass']);
+    gulp.watch('scss/*.scss',{cwd: 'app'}, ['compass']);
     // gulp监控到html,js,css文件改变就执行浏览器重载任务
-    gulp.watch(['*.html', 'html/**/*.html','css/**/*.css', 'js/**/*.js'], {cwd: 'app'}, reload);
+    gulp.watch(['html/*.html','css/**/*.css', 'js/**/*.js'], {cwd: 'app'}, reload);
 });

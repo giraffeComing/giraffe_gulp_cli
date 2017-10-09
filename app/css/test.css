@@ -1,0 +1,17 @@
+body { background: blue; }
+
+@-moz-keyframes slide { 0% { -moz-transform: skew(90deg); transform: skew(90deg); }
+  100% { -moz-transform: skew(90deg); transform: skew(90deg); } }
+@-webkit-keyframes slide { 0% { -webkit-transform: skew(90deg); transform: skew(90deg); }
+  100% { -webkit-transform: skew(90deg); transform: skew(90deg); } }
+@keyframes slide { 0% { -moz-transform: skew(90deg); -ms-transform: skew(90deg); -webkit-transform: skew(90deg); transform: skew(90deg); }
+  100% { -moz-transform: skew(90deg); -ms-transform: skew(90deg); -webkit-transform: skew(90deg); transform: skew(90deg); } }
+div { filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40); opacity: 0.4; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+
+.clear { overflow: hidden; *zoom: 1; }
+
+table th { text-align: center; font-weight: bold; }
+table td, table th { padding: 2px; }
+table td.numeric, table th.numeric { text-align: right; }
+
+/*# sourceMappingURL=test.css.map */

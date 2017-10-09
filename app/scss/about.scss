@@ -1,0 +1,353 @@
+body{
+    background-color: #f5f6f8;
+}
+
+@mixin clearfix {
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+.app{
+    .com-header{
+        position: relative;
+        width: 100%;
+        height: 470px;
+        z-index: 1;
+    }
+    .com-contain{
+        width: 1200px;
+        margin: 0 auto;
+        min-height: 600px;
+        padding:0 80px;
+        background-color: #fff;
+        box-shadow: 0 0 20px #ededed;
+    }
+    .com-footer{
+        width: 100%;
+        height: 134px;
+        background: #383838;
+    }
+}
+
+.wrap{
+    padding:40px 0;
+    @include clearfix;
+    .about{
+        float: left;
+        width:650px;
+    }
+    .contact{
+        float: right;
+        width: 340px;
+        height: 360px;
+        border:1px solid #e6e6e6;
+        border-radius: 3px;
+        padding:25px 40px;
+
+        .title{
+            position: relative;
+            font-size: 14px;
+            line-height: 22px;
+            color: #333;
+            &:before{
+                content: "";
+                width: 8px;
+                height: 14px;
+                border-left: 4px solid #ffcc33;
+                border-right: 4px solid #e6e6e6;
+                position: absolute;
+                left: -14px;
+                top:4px;
+            }
+            span{
+                color: #ccc;
+            }
+        }
+        .info{
+            margin-top: 14px;
+            line-height: 28px;
+            color: #999;
+            font-size: 14px;
+
+            img{
+              display: block;
+              margin-top: 20px;
+            }
+        }
+    }
+
+    .mod-tabs{
+        position: relative;
+        background-color: #f5f6f8;
+        height: 56px;
+        border-top: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+
+        span{
+            position: relative;
+            display: block;
+            float: left;
+            height: 55px;
+            border-top: 2px solid transparent;
+            border-bottom: 1px solid transparent;
+            border-left: 1px solid #e6e6e6;
+            border-right: 1px solid #e6e6e6;
+            text-align: center;
+            line-height: 52px;
+            color: #999;
+            font-size: 20px;
+            min-width: 158px;
+            padding:0 15px;
+            cursor: pointer;
+            margin-bottom: -1px;
+            transition:background-color .3s ease,color .3s ease,border-color .3s ease;
+
+            //&:hover,
+            &.active{
+                background-color: #fff;
+                color: #333;
+                border-top-color: #ffcc33;
+                border-bottom-color: #fff !important;
+            }
+
+            &:hover{
+                background-color: #fff;
+                color: #333;
+                border-bottom-color: #e6e6e6;
+            }
+
+            & + span{
+                border-left: 0;
+            }
+        }
+        &:after{
+            content: "";
+            height: 56px;
+            width: 100px;
+            position: absolute;
+            right: -1px;
+            top:-1px;
+            background: linear-gradient(to right, transparent 0%, #fff 100%);
+        }
+    }
+    .mod-box{
+        .desc{
+            padding:15px 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 36px;
+
+            p{
+                text-indent: 2em;
+            }
+        }
+        .intro{
+            padding: 15px 0;
+            @include clearfix;
+            .item{
+                width: 300px;
+                float: left;
+                padding:40px 0;
+
+                img{
+                    display: block;
+                    float: left;
+                    width: 128px;
+                    height: 128px;
+                }
+                .info{
+                    float: left;
+                    width: 160px;
+                    padding-left: 25px;
+                    padding-top: 65px;
+
+                    h2{
+                        font-size: 20px;
+                        color: #333;
+                    }
+                    p{
+                        font-size: 14px;
+                        color: #999;
+                    }
+                }
+            }
+        }
+        /*企业文化 start*/
+        .mod-title{
+            color: #333;
+            vertical-align: top;
+            font-size: 18px;
+            margin: 44px 0 5px 0;
+            .icon{
+                font-size:0;
+                display: inline-block;
+                vertical-align: top;
+                margin-top: 2px;
+                span{
+                    display: inline-block;
+                    width: 10px;
+                    height:20px;
+                    &:first-child{ background: #ffcc33;}
+                    &:last-child{ background: #e6e6e6;}
+                }
+            }
+        }
+        .listwrap{
+            .item{
+                height: 68px;
+                overflow: hidden;
+                width: 100%;
+                //display: flex;
+                border-radius: 6px;
+                margin-bottom: 22px;
+                &:first-child{
+                    margin-top: 10px;
+                }
+                .tit{
+                    //flex: 0 0 160px;
+                    width: 160px;
+                    float: left;
+                    line-height: 68px;
+                    position: relative;
+                    text-align: center;
+                    background: #f5f6f8;
+                    &.pl{
+                        padding-left: 10px;
+                    }
+                    &:before{
+                        display: block;
+                        content: '';
+                        width: 16px;
+                        height: 16px;
+                        border: 3px solid #ffcc33;
+                        border-radius: 50%;
+                        position: absolute;
+                        left: 28px;
+                        top: 25px;
+                    }
+                }
+                .txt{
+                    //flex: 1;
+                    //float: left;
+                    margin-left: 160px;
+                    background: #f5f6f8;
+                    padding: 10px;
+                    .in{
+                        background: #fff;
+                        padding-left: 10px;
+                        height: 100%;
+                        line-height: 50px;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
+        /*企业文化 end*/
+        /*人才招聘 start*/
+        .line{
+            width: 648px;
+            margin: 40px auto 0;
+            height: 12px;
+            background: url("../img/lineBg.png") no-repeat center 0;
+        }
+        .head{
+            display: flex;
+            margin-top: 40px;
+            overflow: hidden;
+            .zwname{
+                //flex: 0 0 95px;
+                float: left;
+                width: 95px;
+                height: 95px;
+                line-height: 95px;
+                text-align: center;
+                background: #fafafb;
+                color: #feb13f;
+                font-size: 18px;
+                font-weight: 700;
+                border-radius: 50%;
+                border:1px solid #f3f3f4;
+            }
+            .zwyq{
+                //flex: 1;
+                float: left;
+                margin-left: 45px;
+                line-height: 38px;
+                margin-top: 10px;
+                .text{
+                    p{
+                        display: inline-block;
+                        width: 200px;
+                        color: #333;
+                        font-size: 14px;
+                        height: 20px;
+                        line-height: 20px;
+                        span{
+                            color: #999;
+                        }
+                    }
+                }
+            }
+        }
+        .jnlist{
+            margin-top:40px;
+            li{
+                color: #666;
+                font-size:14px;
+                line-height: 36px;
+            }
+        }
+        .emails{
+            margin-top: 40px;
+            color: #666;
+            font-size: 14px;
+            a{
+                color: #336699;
+                font-size: 14px;
+            }
+        }
+        /*人才招聘 end*/
+        .list{
+            .item{
+                padding: 30px 0 ;
+                background-image: url("../img/lineBg.png");
+                background-position: center bottom;
+                background-repeat: no-repeat;
+
+                &:last-child{
+                    background: none;
+                }
+
+                .title{
+                    position: relative;
+                    font-size: 18px;
+                    line-height: 24px;
+                    color: #333;
+                    padding-left: 34px;
+                    &:before{
+                        content: "";
+                        width: 20px;
+                        height: 20px;
+                        border-left: 10px solid #ffcc33;
+                        border-right: 10px solid #e6e6e6;
+                        position: absolute;
+                        left: 0;
+                        top:2px;
+                    }
+                }
+                p{
+                    line-height: 40px;
+                    font-size: 14px;
+                    color: #666;
+                    text-indent: 2em;
+                    margin-top: 20px;
+                }
+            }
+        }
+    }
+}

@@ -1,9 +1,29 @@
 {
+  "name": "gulp-pro",
+  "version": "1.0.0",
+  "description": "a project base on gulp",
+  "main": "main.js",
+  "author": "zhangwei36",
+  "license": "ISC",
   "devDependencies": {
     "browser-sync": "^2.18.13",
+    "fs": "^0.0.1-security",
     "gulp": "^3.9.1",
+    "gulp-compass": "^2.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-file-include": "^1.2.0",
+    "gulp-html-replace": "^1.6.2",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
     "gulp-ruby-sass": "^2.1.1",
     "gulp-sass": "^3.1.0",
-    "jquery": "^3.2.1"
+    "gulp-sequence": "^0.4.6",
+    "gulp-wrapper": "^1.0.0",
+    "jquery": "^3.2.1",
+    "susy": "^3.0.1"
+  },
+  "scripts": {
+    "start": "gulp server"
   }
 }
