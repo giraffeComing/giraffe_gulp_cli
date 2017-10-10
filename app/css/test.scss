@@ -1,0 +1,31 @@
+//@import 'susy';
+//@import "compass/reset";
+@import "compass/css3";
+@import "compass/utilities";
+
+@import "../i/bgs/*.png";
+html{
+    //background: url("i/banner_2.png");
+    @include bgs-sprite(banner_4);
+    background-size: 100% 100%;
+    //background: blue !important;
+}
+
+@include keyframes(slide){
+    0%{
+        @include transform(skew(90deg));
+    }
+    100%{
+        @include transform(skew(90deg));
+    }
+}
+//div{
+//    @include opacity(0.4);
+//    @include border-radius(5px);
+//}
+.clear{
+    @include clearfix;
+}
+//table{
+//    @include table-scaffolding;
+//}

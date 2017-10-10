@@ -108,14 +108,16 @@ var projectUtil = {
 
 //compass
 gulp.task('compass',function(){
-    return gulp.src('app/scss/*.scss')
+    return gulp.src('app/css/*.scss')
         .pipe(compass({
-            // config_file: './style/scss/config.rb',
+            // 这里这个配置文件炒鸡重要，进到配置文件里还要配置一下图片路径
+            config_file: 'config.rb',
             // 是否生成map文件
             sourcemap: false,
             time: true,
             css: 'app/css/',
-            sass: 'app/scss/',
+            sass: 'app/css/',
+            // images:'app/css/i/bgs/',
             style: 'compact' //nested, expanded, compact, compressed
         }))
         .pipe(gulp.dest('app/css/'));
@@ -132,10 +134,31 @@ gulp.task('html',function() {
         .pipe(gulp.dest('app/build/html'));
 });
 
-// task build 打包流程
-gulp.task('build', function() {
-    gulp.run(['minifyCss', 'html']);
+// 移动图片到build
+gulp.task('moveFiles', function() {
+    gulp.src([
+        'app/css/i/*.png',
+        'app/css/i/*.jpg',
+        'app/css/i/*.gif'
+    ])
+        .pipe(gulp.dest('app/build/css/i'));
+    gulp.src([
+        'app/css/bgs/*.png',
+        'app/css/bgs/*.jpg',
+        'app/css/bgs/*.gif'
+    ])
+        .pipe(gulp.dest('app/build/css/sprite'));
+    gulp.src([
+        'app/images/*.png',
+        'app/images/*.jpg',
+        'app/images/*.gif'
+    ])
+        .pipe(gulp.dest('app/build/images'));
 });
+
+
+
+
 // html
 // gulp.task('html', function() {
 //     gulp.src('app/html/**/*.html')
@@ -207,7 +230,12 @@ gulp.task('server', function() {
         }
     });
     // gulp监控到scss文件改变就执行sass任务
-    gulp.watch('scss/*.scss',{cwd: 'app'}, ['compass']);
+    gulp.watch('css/*.scss',{cwd: 'app'}, ['compass']);
     // gulp监控到html,js,css文件改变就执行浏览器重载任务
     gulp.watch(['html/*.html','css/**/*.css', 'js/**/*.js'], {cwd: 'app'}, reload);
+});
+
+// task build 打包流程
+gulp.task('build', function() {
+    gulp.run(['minifyCss','moveFiles', 'html']);
 });

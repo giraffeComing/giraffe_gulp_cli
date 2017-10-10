@@ -1,6 +1,37 @@
+@charset "utf-8";
+//引入初始化模块//引入初始化模块
+//顶头一定要记得加utf-8，不然会报错xE5错误
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/utilities";
+
+@import "../i/bgs/*.png";
 html{
-    background: #f5f6f8;
+    @include bgs-sprite(banner_5);
+    background-size: 100% 100%;
 }
+
+@include keyframes(slide){
+    0%{
+        @include transform(skew(90deg));
+    }
+    100%{
+        @include transform(skew(90deg));
+    }
+}
+.opacity{
+    @include opacity(0.4);
+    @include border-radius(5px);
+}
+.clear{
+    @include clearfix;
+}
+//table{
+//    @include table-scaffolding;
+//}
+
+
+
 .app{
     overflow: hidden;
     font: 14px Microsoft YaHei,tahoma,arial,Hiragino Sans GB,\\5b8b\4f53,sans-serif;
@@ -15,7 +46,7 @@ html{
                 float: left;
                 width: 145px;
                 height: 70px;
-                background: url("../img/logo.png") no-repeat;
+                background: url("../images/logo.png") no-repeat;
             }
             .nav-ul{
                 position: relative;
@@ -28,7 +59,7 @@ html{
                     left: 0;
                     top: 0;
                     z-index: 1;
-                    background: url("../img/list_current_bg.png") no-repeat;
+                    background: url("../images/list_current_bg.png") no-repeat;
                 }
                 .nav-li{
                     position: relative;
@@ -50,7 +81,7 @@ html{
                         height: 70px;
                     }
                     &:hover{
-                        background: url("../img/list_current_bg.png") no-repeat;
+                        background: url("../images/list_current_bg.png") no-repeat;
                     }
                     .child-ul{
                         position: absolute;
@@ -120,7 +151,7 @@ html{
     }
     .banner{
         height: 400px;
-        background: url("../img/banner_bg.jpg") no-repeat;
+        background: url("../images/banner_bg.jpg") no-repeat;
         background-size: cover;
         background-position: center top;
         -webkit-animation: bannerOpacity 1.2s;
@@ -185,7 +216,7 @@ html{
                 text-align: center;
                 color: #333;
                 font-size: 30px;
-                background: url("../img/bg_line_01.png") no-repeat;
+                background: url("../images/bg_line_01.png") no-repeat;
             }
             .title-short{
                 height: 32px;
@@ -194,7 +225,7 @@ html{
                 text-align: center;
                 color: #333;
                 font-size: 30px;
-                background: url("../img/bg_line_02.png") no-repeat;
+                background: url("../images/bg_line_02.png") no-repeat;
             }
             .des{
                 margin: 50px 0 25px;
@@ -270,16 +301,16 @@ html{
                     }
                 }
                 .icon01{
-                    background: url("../img/block-bg01.png") no-repeat;
+                    background: url("../images/block-bg01.png") no-repeat;
                 }
                 .icon02{
-                    background: url("../img/block-bg02.png") no-repeat;
+                    background: url("../images/block-bg02.png") no-repeat;
                 }
                 .icon03{
-                    background: url("../img/block-bg03.png") no-repeat;
+                    background: url("../images/block-bg03.png") no-repeat;
                 }
                 .icon04{
-                     background: url("../img/block-bg04.png") no-repeat;
+                     background: url("../images/block-bg04.png") no-repeat;
                  }
 
             }
@@ -311,16 +342,16 @@ html{
                 }
             }
             .icon01{
-                background: url("../img/etra-bg01.png") no-repeat;
+                background: url("../images/etra-bg01.png") no-repeat;
             }
             .icon02{
-                background: url("../img/etra-bg02.png") no-repeat;
+                background: url("../images/etra-bg02.png") no-repeat;
             }
             .icon03{
-                background: url("../img/etra-bg03.png") no-repeat;
+                background: url("../images/etra-bg03.png") no-repeat;
             }
             .icon04{
-                background: url("../img/etra-bg04.png") no-repeat;
+                background: url("../images/etra-bg04.png") no-repeat;
             }
         }
     }

@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>微路投资</title>
+    <!-- build:css -->
     <link rel="stylesheet" href="../../css/reset.css">
+    <link rel="stylesheet" href="../../css/test.css">
     <link rel="stylesheet" href="../../css/index.css">
+    <!-- endbuild -->
+    <!-- build:js -->
     <script src="../../js/jquery-3.2.1.min.js"></script>
     <script src="../../js/main.js"></script>
+    <!-- endbuild -->
 </head>
 <body>
 <div class="app">
@@ -19,7 +24,7 @@
     <!--contain-->
     <div class="com-contain">
         <div class="contain-wrap">
-            <div class="title-long">投资理资44556677产管理</div>
+            <div class="title-long">投资理资11111产管理</div>
             <p class="des">微路投资管理有限公司作为一家专业化的投资机构，致力于打造国内领先的综合资产管理投资平台。</p>
             <ul class="items">
                 <li class="item">
