@@ -19,6 +19,7 @@
     "gulp-ruby-sass": "^2.1.1",
     "gulp-sass": "^3.1.0",
     "gulp-sequence": "^0.4.6",
+    "gulp-uglify": "^3.0.0",
     "gulp-wrapper": "^1.0.0",
     "jquery": "^3.2.1",
     "susy": "^3.0.1"

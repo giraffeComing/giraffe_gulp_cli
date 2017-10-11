@@ -15,10 +15,8 @@ var fileinclude  = require('gulp-file-include');
 var rename = require("gulp-rename");
 // 压缩css
 var minifyCSS = require('gulp-minify-css');
-
 // 文件拼合
 var concat = require('gulp-concat');
-
 // 读写文件 node 内置模块
 var fs = require('fs');
 // 文件内的附加内容
@@ -29,7 +27,8 @@ var gulpSequence = require('gulp-sequence');
 var replace = require('gulp-replace');
 // html内容替换
 var htmlreplace = require('gulp-html-replace');
-
+// js文件压缩
+var uglify = require('gulp-uglify');
 /**
  * [projectConfig 项目设置]
  */
@@ -105,7 +104,6 @@ var projectUtil = {
     }
 };
 
-
 //compass
 gulp.task('compass',function(){
     return gulp.src('app/css/*.scss')
@@ -156,21 +154,21 @@ gulp.task('moveFiles', function() {
         .pipe(gulp.dest('app/build/images'));
 });
 
-
-
-
-// html
-// gulp.task('html', function() {
-//     gulp.src('app/html/**/*.html')
-//     // 正则匹配路径，注意..\/
-//         .pipe(replace(/href="..\/..\/css/g, 'href="' + projectUtil.getCDNpath() + '/css/index.min.css'))
-//         // .pipe(replace(/src="..\/js/g, 'src="' + projectUtil.getCDNpath() + '/js'))
-//         // .pipe(replace(/src="..\/images/g, 'src="' + projectUtil.getCDNpath() + '/images'))
-//         // .pipe(replace(/src="..\/css/g, 'src="' + projectUtil.getCDNpath() + '/css'))
-//         // .pipe(replace(/url\(..\/images/g, 'url(' + projectUtil.getCDNpath() + '/images'))
-//         // .pipe(replace(/lazyload="..\/images/g, 'lazyload="' + projectUtil.getCDNpath() + '/images'))
-//         .pipe(gulp.dest('app/build/html'))
-// });
+// uglify javascript
+gulp.task('js', function() {
+    gulp.src([
+        'app/js/**/*.js'
+    ]).pipe(uglify({
+        //注意，以前的保留字字段是except，现在的是reserved
+        mangle: { reserved: ['require' ,'exports' ,'module' ,'jQuery', '$'] },
+        output: { ascii_only: true }
+    }))
+        // .pipe(replace(/\.\.\//, projectUtil.getCDNpath() + '/'))
+        .pipe(wrapper({
+            header: '/* @update: ' + projectUtil.getNowDate() + ' */ \n'
+        }))
+        .pipe(gulp.dest('app/build/js'))
+});
 
 // css拼合
 gulp.task('contactCss', function() {
@@ -213,7 +211,6 @@ gulp.task('fileinclude', function() {
         .pipe(gulp.dest('app/html'));
 });
 
-
 // 监视文件改动并重新载入
 gulp.task('server', function() {
     // 先拼合一下模板
@@ -237,5 +234,5 @@ gulp.task('server', function() {
 
 // task build 打包流程
 gulp.task('build', function() {
-    gulp.run(['minifyCss','moveFiles', 'html']);
+    gulp.run(['minifyCss','js','moveFiles', 'html']);
 });
