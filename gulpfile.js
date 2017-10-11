@@ -1,8 +1,8 @@
 /**
- * Created by zhangwei36 on 2017/9/18.
+ * Created by zhangwei36@staff.sina.com.cn on 2017/9/18.
  */
 var gulp = require('gulp');
-// 这里要用gulp-sass不能用gulp-ruby-sass
+// sass（引入compass后已弃用）
 var sass = require('gulp-sass');
 // 引入compass
 var compass = require('gulp-compass');
@@ -46,34 +46,10 @@ var projectConfig = {
     // CDN路径
     cdnPath: '//static.360buyimg.com/'
 };
-
-
 /**
  * [projectUtil 工具类]
  */
 var projectUtil = {
-    // 格式化路径
-    fomartPath: function(pathStr) {
-        return pathStr.replace(/\\/g, '\/');
-    },
-    // 获取当前目录
-    getCurrentDir: function() {
-        return fs.realpathSync('./');
-    },
-    // 获取svn根目录
-    getSvnRoot: function() {
-        var currentDir = this.getCurrentDir();
-        var svnRoot = currentDir.replace(/static\S*/g, '');
-        svnRoot = this.fomartPath(svnRoot);
-        return svnRoot;
-    },
-    // 获取发布目录
-    getReleasePath: function() {
-        var svnRoot = this.getSvnRoot();
-        var releasePath = projectConfig.releasePath;
-        var targetPath = path.join(svnRoot, 'release', releasePath);
-        return targetPath;
-    },
     // 获取CDN全部路径
     getCDNpath: function() {
         var cdnPath = projectConfig.cdnPath + projectConfig.releasePath;
@@ -123,7 +99,6 @@ gulp.task('compass',function(){
 
 // html打包到build目录时候对css和js的引用路径进行替换
 gulp.task('html',function() {
-    // var opts = {comments:false,spare:false,quotes:true};
     return gulp.src('app/html/**/*.html')
         .pipe(htmlreplace({
             'css': projectUtil.getCDNpath()+'/css/index.min.css',
@@ -218,7 +193,6 @@ gulp.task('server', function() {
     // 模板发生修改的时候再重新拼合模板并更新html,watch的时候一定要指定cwd的目录
     // **/*能匹配到目录下的所有文件
     gulp.watch('html/template/**/*.tpl', {cwd: 'app'}, ['fileinclude']);
-
     browserSync({
         server: {
             baseDir: 'app',
@@ -232,7 +206,12 @@ gulp.task('server', function() {
     gulp.watch(['html/*.html','css/**/*.css', 'js/**/*.js'], {cwd: 'app'}, reload);
 });
 
+// 删除build文件夹
+gulp.task('deleteBuild', function() {
+    projectUtil.deleteDir('app/build');
+});
+
 // task build 打包流程
 gulp.task('build', function() {
-    gulp.run(['minifyCss','js','moveFiles', 'html']);
+    gulp.run(['deleteBuild','minifyCss','js','moveFiles', 'html']);
 });
