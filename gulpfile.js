@@ -102,7 +102,9 @@ gulp.task('html',function() {
     return gulp.src('app/html/**/*.html')
         .pipe(htmlreplace({
             'css': projectUtil.getCDNpath()+'/css/index.min.css',
-            'js': projectUtil.getCDNpath()+'/js/main.min.js'
+            'seajs': projectUtil.getCDNpath()+'/js/sea.js',
+            'jquery': projectUtil.getCDNpath()+'/js/jquery-3.2.1.min.js',
+            'mainjs': projectUtil.getCDNpath()+'/js/main.js'
         }))
         .pipe(gulp.dest('app/build/html'));
 });

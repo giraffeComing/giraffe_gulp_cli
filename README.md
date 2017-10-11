@@ -5,8 +5,11 @@
 ## Build Setup
 
 ``` bash
+At first you should install Ruby on your computer.  
+
+Then
 # install dependencies
-cnpm install
+npm install
 
 # serve with hot reload at localhost:3000
 gulp server
@@ -14,9 +17,7 @@ gulp server
 # build for production with minification
 gulp build
 
-
 ```
-
 ### 一、项目热加载
 
 编辑scss、tpl、js文件的时候页面会实时刷新，无需手动刷新
