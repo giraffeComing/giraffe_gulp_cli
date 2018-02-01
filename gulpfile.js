@@ -29,6 +29,12 @@ var replace = require('gulp-replace');
 var htmlreplace = require('gulp-html-replace');
 // js文件压缩
 var uglify = require('gulp-uglify');
+
+// es6转es5
+var babel = require('gulp-babel');
+// cmd&amd转普通js
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 /**
  * [projectConfig 项目设置]
  */
@@ -79,6 +85,17 @@ var projectUtil = {
         }
     }
 };
+
+
+// 编译并压缩js
+gulp.task('c', function(){
+    return gulp.src('app/js/*.js')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('app/dist/js'))
+})
+
 
 //compass
 gulp.task('compass',function(){
