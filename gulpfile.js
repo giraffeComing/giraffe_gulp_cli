@@ -35,6 +35,8 @@ var babel = require('gulp-babel');
 // cmd&amd转普通js
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+// 按顺序执行任务
+var gulpSequence = require('gulp-sequence');
 /**
  * [projectConfig 项目设置]
  */
@@ -85,6 +87,12 @@ var projectUtil = {
         }
     }
 };
+
+// 修改js文件执行
+gulp.task('jsModify',function () {
+    gulp.run('es6');
+    gulp.run('browserify');
+});
 
 
 // es6转es5
@@ -243,13 +251,10 @@ gulp.task('server', function() {
     gulp.watch('css/*.scss',{cwd: 'app'}, ['compass']);
 
     // 监控到js文件改变了就执行es6转es5
-    gulp.watch(['js/**/*.js'], {cwd: 'app'}, ['es6']);
+    gulp.watch(['js/**/*.js'], {cwd: 'app'}, ['jsModify']);
 
-    // 监控到js文件改变了就执行es6转普通js
-    gulp.watch(['dist/**/*.js'], {cwd: 'app'}, ['browserify']);
-
-    // gulp监控到html,js,css文件改变就执行浏览器重载任务
-    gulp.watch(['html/*.html','css/**/*.css', 'dist/**/*.js',], {cwd: 'app'}, reload);
+    // gulp监控到html,js,css文件改变就执行浏览器重载任务，这里要检测的是js文件夹下的而不能检测dist这个文件，dist是后生成的，有可能存在监测不到的情况
+    gulp.watch(['html/*.html','css/**/*.css', 'js/**/*.js',], {cwd: 'app'}, reload);
 
 });
 
@@ -260,5 +265,5 @@ gulp.task('deleteBuild', function() {
 
 // task build 打包流程
 gulp.task('build', function() {
-    gulp.run(['deleteBuild','minifyCss','js','moveFiles', 'html']);
+    gulp.run(['deleteBuild','minifyCss','moveFiles', 'html']);
 });
