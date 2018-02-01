@@ -6,7 +6,10 @@
   "author": "zhangwei36",
   "license": "ISC",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "browser-sync": "^2.18.13",
+    "browserify": "^15.2.0",
     "fs": "^0.0.1-security",
     "gulp": "^3.9.1",
     "gulp-compass": "^2.1.0",
@@ -22,7 +25,8 @@
     "gulp-uglify": "^3.0.0",
     "gulp-wrapper": "^1.0.0",
     "jquery": "^3.2.1",
-    "susy": "^3.0.1"
+    "susy": "^3.0.1",
+    "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
     "start": "gulp server"
