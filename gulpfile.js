@@ -88,16 +88,16 @@ var projectUtil = {
 
 
 // es6转es5
-gulp.task('c', function(){
+gulp.task('es6', function(){
     return gulp.src('app/js/*.js')
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('app/dist/js'))
+        .pipe(gulp.dest('app/dist/js'));
 });
 
 // browserify
-gulp.task("bb", function () {
+gulp.task("browserify", function () {
     var b = browserify({
         entries: "app/dist/js/main.js"
     });
@@ -160,20 +160,20 @@ gulp.task('moveFiles', function() {
 });
 
 // uglify javascript
-gulp.task('js', function() {
-    gulp.src([
-        'app/js/**/*.js'
-    ]).pipe(uglify({
-        //注意，以前的保留字字段是except，现在的是reserved
-        mangle: { reserved: ['require' ,'exports' ,'module' ,'jQuery', '$'] },
-        output: { ascii_only: true }
-    }))
-        // .pipe(replace(/\.\.\//, projectUtil.getCDNpath() + '/'))
-        .pipe(wrapper({
-            header: '/* @update: ' + projectUtil.getNowDate() + ' */ \n'
-        }))
-        .pipe(gulp.dest('app/build/js'))
-});
+// gulp.task('js', function() {
+//     gulp.src([
+//         'app/js/**/*.js'
+//     ]).pipe(uglify({
+//         //注意，以前的保留字字段是except，现在的是reserved
+//         mangle: { reserved: ['require' ,'exports' ,'module' ,'jQuery', '$'] },
+//         output: { ascii_only: true }
+//     }))
+//         // .pipe(replace(/\.\.\//, projectUtil.getCDNpath() + '/'))
+//         .pipe(wrapper({
+//             header: '/* @update: ' + projectUtil.getNowDate() + ' */ \n'
+//         }))
+//         .pipe(gulp.dest('app/build/js'))
+// });
 
 // css拼合
 gulp.task('contactCss', function() {
@@ -216,13 +216,18 @@ gulp.task('fileinclude', function() {
         .pipe(gulp.dest('app/html'));
 });
 
+
 // 监视文件改动并重新载入
 gulp.task('server', function() {
-    // 先拼合一下模板
+
+    // 起服务之后先执行一下es6向下的转换，再执行amd&cmd向普通js的转换
+    gulp.run(['es6'],function () {
+        gulp.run(['browserify'],function () {});
+    });
+
+    // js文件就绪后拼合一下模板
     gulp.run(['fileinclude']);
     // 模板发生修改的时候再重新拼合模板并更新html,watch的时候一定要指定cwd的目录
-    // **/*能匹配到目录下的所有文件
-    gulp.watch('html/template/**/*.tpl', {cwd: 'app'}, ['fileinclude']);
     browserSync({
         server: {
             baseDir: 'app',
@@ -230,10 +235,22 @@ gulp.task('server', function() {
             directory: true
         }
     });
+
+    // **/*能匹配到目录下的所有文件
+    gulp.watch('html/template/**/*.tpl', {cwd: 'app'}, ['fileinclude']);
+
     // gulp监控到scss文件改变就执行sass任务
     gulp.watch('css/*.scss',{cwd: 'app'}, ['compass']);
+
+    // 监控到js文件改变了就执行es6转es5
+    gulp.watch(['js/**/*.js'], {cwd: 'app'}, ['es6']);
+
+    // 监控到js文件改变了就执行es6转普通js
+    gulp.watch(['dist/**/*.js'], {cwd: 'app'}, ['browserify']);
+
     // gulp监控到html,js,css文件改变就执行浏览器重载任务
-    gulp.watch(['html/*.html','css/**/*.css', 'js/**/*.js'], {cwd: 'app'}, reload);
+    gulp.watch(['html/*.html','css/**/*.css', 'dist/**/*.js',], {cwd: 'app'}, reload);
+
 });
 
 // 删除build文件夹

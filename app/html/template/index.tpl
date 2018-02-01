@@ -25,3 +25,4 @@
 </div>
 </body>
 </html>
+<script src="../../dist/js/bundle.js"></script>
