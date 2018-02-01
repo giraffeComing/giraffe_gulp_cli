@@ -87,14 +87,25 @@ var projectUtil = {
 };
 
 
-// 编译并压缩js
+// es6转es5
 gulp.task('c', function(){
     return gulp.src('app/js/*.js')
         .pipe(babel({
             presets: ['es2015']
         }))
         .pipe(gulp.dest('app/dist/js'))
-})
+});
+
+// browserify
+gulp.task("bb", function () {
+    var b = browserify({
+        entries: "app/dist/js/main.js"
+    });
+
+    return b.bundle()
+        .pipe(source("bundle.js"))
+        .pipe(gulp.dest("app/dist/js"));
+});
 
 
 //compass
